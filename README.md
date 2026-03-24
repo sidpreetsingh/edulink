@@ -292,5 +292,5 @@ JWT_SECRET=<your-jwt-secret>
 
 For learning, portfolio, and backend development practice.
 
----
+
 
