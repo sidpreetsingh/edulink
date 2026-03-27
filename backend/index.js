@@ -11,6 +11,7 @@ const adminRouter=require("./routes/adminRoutes");
 const purchaseRouter=require("./routes/purchaseRoutes");
 const publicRouter=require("./routes/publicRoutes");
 const { globalErrorHandler } = require("./middlewares/globalErrorHandler");
+const { AppError } = require("./utilities/appError");
 
 connectDB();
 
@@ -20,6 +21,10 @@ app.use('/api/courses',courseRouter)
 app.use('/api/admin',adminRouter)
 app.use('/api/purchases',purchaseRouter);
 app.use('/api',publicRouter);
+
+app.use('/api/*',(req,res,next)=>{
+    next(new AppError(`Can't find ${req.originalUrl}`,404))
+})
 
 
 app.use(globalErrorHandler);
