@@ -13,7 +13,7 @@ const PurchaseSchema=new schema({
     }
 },{timestamps:true})
 
-PurchaseSchema.index({userId,courseId},{unique:true})//this ensures that we still prevent duplicates in race conditions as it 
+PurchaseSchema.index({userId:1 ,courseId:1 },{unique:true})//this ensures that we still prevent duplicates in race conditions as it 
                                                      // does faster lookup since it is indexed!!!
 
 const PurchaseModel=mongoose.model('purchases',PurchaseSchema)
