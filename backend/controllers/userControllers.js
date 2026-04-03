@@ -2,6 +2,7 @@ const UserModel = require("../models/user");
 const bcrypt = require('bcrypt');
 const { AppError } = require("../utilities/appError");
 const { asyncWrapper } = require("../middlewares/asyncWrapper");
+const PurchaseModel = require("../models/purchases");
 
 exports.myprofile = asyncWrapper(async (req, res) => {
     const id = req.user.id;
@@ -85,15 +86,30 @@ exports.getAllUsers = asyncWrapper(async (req, res) => {
 
 exports.deleteUser = asyncWrapper(async (req, res) => {
     const { userId } = req.params;
-
-    const user = await UserModel.findByIdAndDelete(userId);
-
+  
+    // Check if user exists
+    const user = await UserModel.findById(userId);
     if (!user) {
-        throw new AppError("User not found!!", 404);
+      throw new AppError("User not found!", 404);
     }
-
-    res.json({ message: "User deleted successfully" });
-});
+  
+    try {
+      // Delete all purchases related to this user
+      await PurchaseModel.deleteMany({ userId: userId });
+  
+      // Delete the user
+      await UserModel.findByIdAndDelete(userId);
+  
+      res.status(200).json({
+        success: true,
+        message: "User and all related purchases deleted successfully!",
+        data: user
+      });
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      throw new AppError("Failed to delete user", 500);
+    }
+  });
 
 exports.changeRole = asyncWrapper(async (req, res) => {
     const { userId } = req.params;
