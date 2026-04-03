@@ -5,7 +5,7 @@ const { asyncWrapper } = require("../middlewares/asyncWrapper");
 exports.protect = asyncWrapper(async (req, res, next) => {
     const authheader = req.headers.authorization;
 
-    if (!authheader || !authheader.startWith('Bearer')) {
+    if (!authheader || !authheader.startsWith('Bearer')) {
         throw new AppError("Authorization Error!!", 401);
     }
 

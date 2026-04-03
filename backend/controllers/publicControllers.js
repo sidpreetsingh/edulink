@@ -4,7 +4,7 @@ const { AppError } = require("../utilities/appError");
 const { asyncWrapper } = require("../middlewares/asyncWrapper");
 
 exports.allCoursesPublic = asyncWrapper(async (req, res) => {
-    const courses = await CourseModel.find({ published: true })
+    const courses = await CourseModel.find({ published: true,status:"active" })
         .populate('teacherId', 'name');
 
     res.status(200).json({
@@ -19,7 +19,8 @@ exports.viewCoursePublic = asyncWrapper(async (req, res) => {
 
     const course = await CourseModel.findOne({
         _id: courseId,
-        published: true
+        published: true,
+        status:"active"
     }).populate('teacherId', 'name');
 
     if (!course) {

@@ -7,6 +7,7 @@ const UserSchema=new schema({
     name: { type: String, required: true, trim: true, minlength: 2 },
     password:{type:String,required:true},
     role: {type:String,enum:["admin","teacher","student"],default:"student"},
+    profileImage: { type: String, default: null },
     purchasedCoursesId: [{type:objectid,ref:'courses'}],
     createdCoursesId: [{type:objectid,ref:'courses'}],
 },{timestamps:true})

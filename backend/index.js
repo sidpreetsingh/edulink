@@ -2,12 +2,16 @@ require("dotenv").config({ path: __dirname + "/.env" });
 const express=require('express');
 const app=express();
 const cors = require("cors");
+const path = require('path');
 app.use(cors({
     origin: "http://localhost:5173",  // your frontend URL
     credentials: true,                // if you plan to send cookies
   }));
 
+
 app.use(express.json())
+ 
+
 
 const connectDB=require("./config/db");
 const authRouter = require("./routes/authRoutes");

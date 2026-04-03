@@ -32,7 +32,8 @@ exports.signup = asyncWrapper(async (req, res) => {
                 id: user._id,
                 email: user.email,
                 name: user.name,
-                role: user.role
+                role: user.role,
+                profileImage: user.profileImage
             }
         });
 });
@@ -43,7 +44,7 @@ exports.signin = asyncWrapper(async (req, res) => {
 
         const existingUser = await UserModel.findOne({ email });
         if (!existingUser) {
-            throw new AppError("Invalid email or password", 401);
+            throw new AppError("Please Sign Up first!!", 404);
         }
 
         const passcheck = await bcrypt.compare(password, existingUser.password);
@@ -61,7 +62,8 @@ exports.signin = asyncWrapper(async (req, res) => {
                 id: existingUser._id,
                 email: existingUser.email,
                 name: existingUser.name,
-                role: existingUser.role
+                role: existingUser.role,
+                profileImage: existingUser.profileImage
             }
         });
     

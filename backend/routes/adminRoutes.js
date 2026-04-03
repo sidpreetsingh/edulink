@@ -6,17 +6,19 @@ const { getallCourses } = require('../controllers/courseControllers');
 const { getAllPurchases, getPurchasesOfUser, deletePurchase } = require('../controllers/purchaseControllers');
 const { validate } = require('../middlewares/validate');
 const { userIdParam, changeRoleSchema, purchIdParam } = require('../validators/adminValidator');
+const { getDashboardStats, getAllCoursesAdmin } = require('../controllers/adminControllers');
 const router=express.Router();
 
 router.use(protect,authorize('admin'));
 
 router.get('/users',getAllUsers);
-router.get('/courses',getallCourses);
+router.get('/courses',getAllCoursesAdmin);
 router.get('/purchases',getAllPurchases);
 router.delete('/users/:userId',validate(userIdParam,"params"),deleteUser);
 router.patch('/users/:userId/role',validate(userIdParam,"params"),validate(changeRoleSchema),changeRole);
 router.get('/purchases/:userId',validate(userIdParam,"params"),getPurchasesOfUser);
 router.delete('/purchases/:purchId',validate(purchIdParam,"params"),deletePurchase);
+router.get("/dashboard-stats", getDashboardStats);
 
 module.exports=router;
 

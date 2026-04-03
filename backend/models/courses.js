@@ -7,7 +7,12 @@ const CourseSchema=new schema({
     description:String,
     price:{type:Number, required:true},
     image:String,
-    teacherId:{type:objectid, required:true,ref:'users'},
+    teacherId:{type:objectid,ref:'users'},
+    status: {
+        type: String,
+        enum: ["active", "archived"],
+        default: "active"
+      },
     published:{type:Boolean, default:false}
 },{timestamps:true})
 

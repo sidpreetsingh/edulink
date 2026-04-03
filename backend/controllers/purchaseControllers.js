@@ -27,6 +27,15 @@ exports.createPurchase = asyncWrapper(async (req, res) => {
             price: course.price
         });
 
+        // Populate the purchase with course and teacher data
+        await purchase.populate({
+            path: 'courseId',
+            populate: {
+                path: 'teacherId',
+                select: 'name email'
+            }
+        });
+
         res.status(201).json({
             success: true,
             message: "Purchase Successful",
@@ -44,7 +53,13 @@ exports.purchasedCourses = asyncWrapper(async (req, res) => {
     const userId = req.user.id;
 
     const purchases = await PurchaseModel.find({ userId: userId })
-        .populate('courseId', 'title description price image')
+        .populate({
+            path: 'courseId',
+            populate: {
+                path: 'teacherId',
+                select: 'name email'
+            }
+        })
         .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -104,7 +119,13 @@ exports.getPurchasesOfUser = asyncWrapper(async (req, res) => {
     }
 
     const purchases = await PurchaseModel.find({ userId })
-        .populate('courseId', 'title price')
+        .populate({
+            path: 'courseId',
+            populate: {
+                path: 'teacherId',
+                select: 'name email'
+            }
+        })
         .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -117,7 +138,13 @@ exports.getPurchasesOfUser = asyncWrapper(async (req, res) => {
 exports.getAllPurchases = asyncWrapper(async (req, res) => {
     const purchases = await PurchaseModel.find()
         .populate('userId', 'name email')
-        .populate('courseId', 'title price')
+        .populate({
+            path: 'courseId',
+            populate: {
+                path: 'teacherId',
+                select: 'name email'
+            }
+        })
         .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -140,5 +167,30 @@ exports.deletePurchase = asyncWrapper(async (req, res) => {
     res.status(200).json({
         success: true,
         message: "Deleted successfully"
+    });
+});
+
+exports.getTeacherEnrollments = asyncWrapper(async (req, res) => {
+    const teacherId = req.user.id;
+
+    // Get all teacher's courses
+    const courses = await CourseModel.find({ teacherId });
+    const courseIds = courses.map(c => c._id);
+
+    // Get all enrollments for these courses
+    const enrollments = await PurchaseModel.find({ courseId: { $in: courseIds } })
+        .populate('userId', 'name email')
+        .populate({
+            path: 'courseId',
+            populate: {
+                path: 'teacherId',
+                select: 'name email'
+            }
+        });
+
+    res.status(200).json({
+        success: true,
+        data: enrollments,
+        count: enrollments.length
     });
 });
