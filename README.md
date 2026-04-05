@@ -434,7 +434,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 **Sidpreet Singh**
 
 - GitHub: [@sidpreetsingh](https://github.com/sidpreetsingh)
-- LinkedIn: [Connect with me](https://linkedin.com/in/sidpreet)
+- LinkedIn: [Connect with me](https://linkedin.com/in/sidpreetsingh)
 - Email: sidpreetsandhu29@gmail.com
 
 ---
