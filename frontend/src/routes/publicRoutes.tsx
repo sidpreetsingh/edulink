@@ -8,7 +8,6 @@ export default function PublicRoute() {
     return <div>Loading...</div>;
   }
 
-  // 👇 If already logged in → redirect
   if (user) {
     return <Navigate to="/user/" replace />;
   }

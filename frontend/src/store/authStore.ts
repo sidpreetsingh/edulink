@@ -2,7 +2,7 @@ import { create } from "zustand";
 import type { UserProfile } from "../types/user";
 import { api } from "../api/axios";
 
-// Define the store's state and actions
+
 interface AuthState {
   user: UserProfile | null;
   token: string | null;
@@ -28,7 +28,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       user: { ...state.user, ...userUpdate } as UserProfile,
     })),
 
-  // Load user from backend using token
+  
   loadUser: async () => {
     const token = localStorage.getItem("token");
   

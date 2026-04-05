@@ -5,6 +5,7 @@ import { usePurchasesStore } from "../store/purchasedStore";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BookOpen, ShoppingCart, Check } from "lucide-react";
+import { api } from "../api/axios";
 
 interface Props {
   course: Course;
@@ -47,6 +48,14 @@ export default function CourseCard({ course }: Props) {
     
       try {
         setLoading(true);
+
+        const courseCheck = await api.get(`/courses/${course._id}`);
+
+        if (!courseCheck.data?.data) {
+          throw new Error("Course no longer available");
+        }
+
+
     
         await buyCourse(course._id);
     

@@ -45,7 +45,6 @@ export const usePurchasesStore = create<PurchasesState>((set, get) => ({
   fetchPurchasedCourses: async () => {
     try {
       const res = await api.get<PurchaseApiResponse>("/purchases/");
-      // Backend returns { success, data, count } so we extract data
       set({ purchasedCourses: res.data.data });
     } catch (err) {
       console.error("Failed to fetch purchased courses", err);
@@ -53,21 +52,20 @@ export const usePurchasesStore = create<PurchasesState>((set, get) => ({
     }
   },
 
-  // Buy a course
   buyCourse: async (courseId: string) => {
     try {
       const res = await api.post<PurchaseApiRequest>(`/purchases/${courseId}`);
       set({ purchasedCourses: [...get().purchasedCourses, res.data.data] });
     } catch (err: any) {
       if (err.response?.data?.message) {
-        alert(err.response.data.message); // e.g., already purchased
+        alert(err.response.data.message); 
       } else {
         console.error("Failed to buy course", err);
       }
     }
   },
 
-  // Check if a course is already purchased
+  
   checkIfPurchased: async (courseId: string) => {
     try {
       const res = await api.get<{ success: boolean; purchased: boolean }>(
